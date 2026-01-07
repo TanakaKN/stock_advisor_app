@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock Advisor</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 30px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 12px;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #7f1d1d;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 18px;
+            border-radius: 8px;
+        }
+
+        .BUY {
+            background: #ecfeff;
+            border-left: 5px solid #06b6d4;
+        }
+
+        .SELL {
+            background: #fff1f2;
+            border-left: 5px solid #ef4444;
+        }
+
+        .HOLD {
+            background: #fffbeb;
+            border-left: 5px solid #f59e0b;
+        }
+
+        .result h2 {
+            margin-top: 0;
+        }
+
+        .disclaimer {
+            margin-top: 30px;
+            font-size: 13px;
+            color: #555;
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
+            line-height: 1.4;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>📈 Stock Advisor</h1>
+
+    <form method="POST" onsubmit="handleSubmit()">
+        {% csrf_token %}
+        <input
+            type="text"
+            name="ticker"
+            placeholder="Enter stock ticker (e.g. AAPL)"
+            required
+        >
+        <button type="submit" id="submitBtn">Analyze Stock</button>
+    </form>
+
+    {% if error %}
+        <div class="error">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    {% if recommendation %}
+        <div class="result {{ recommendation }}">
+            <h2>Recommendation: {{ recommendation }}</h2>
+
+            <p><strong>Current Price:</strong> {{ current_price }}</p>
+            <p><strong>Predicted Price:</strong> {{ predicted_price }}</p>
+            <p><strong>Confidence:</strong> {{ confidence }}</p>
+            <p><strong>Holding Period:</strong> {{ holding_period }}</p>
+
+            <p style="margin-top: 10px;">
+                {{ explanation }}
+            </p>
+        </div>
+    {% endif %}
+
+    <div class="disclaimer">
+        <strong>Disclaimer:</strong><br>
+        This application is for <strong>educational purposes only</strong> and does
+        not constitute financial or investment advice. Trading in financial markets
+        involves risk, and past performance does not guarantee future results.
+        Always do your own research or consult a qualified financial advisor.
+    </div>
+
+    <div class="footer">
+        Built with Python, Django & Machine Learning
+    </div>
+</div>
+
+<script>
+    function handleSubmit() {
+        const btn = document.getElementById("submitBtn");
+        btn.disabled = true;
+        btn.innerText = "Analyzing...";
+    }
+</script>
+
+</body>
+</html>
